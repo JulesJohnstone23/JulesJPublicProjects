@@ -16,6 +16,17 @@ std::vector<std::vector<char>> returnGameBoard(int num, char symbol){
 
 }
 
+void printGameBoard(std::vector<std::vector<char>> gameBoard){
+    for(int i =0; i<gameBoard.size(); i++){
+        for(int j =0; j<gameBoard.size(); j++){
+            std::cout<<gameBoard[i][j]<<" ";
+        }
+        std::cout<<"\n";
+        
+    }
+    
+}
+
 void gameBoard(int indexOne, int indexTwo){
 
     
@@ -32,12 +43,11 @@ int main(){
     std::cout<<"What symbol would you like to use for gameboard?"<<std::endl;
     std::cin>>symbol;
     std::vector<std::vector<char>> gameBoard = returnGameBoard(num,symbol);
-    for(int i =0; i<gameBoard.size(); i++){
-        for(int j =0; j<gameBoard.size(); j++){
-            std::cout<<gameBoard[i][j]<<" ";
-        }
-        std::cout<<"\n";
+    
+    bool running = true;
+
+    while (running){
+        printGameBoard(gameBoard);
         
     }
-
 }
