@@ -2,25 +2,39 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <iomanip>
 
 std::vector<std::vector<char>> returnGameBoard(int num, char symbol){
     std::vector<std::vector<char>> board;
+
     for(int row=0; row<num; row++){
         std::vector<char> currentRow;
 
         for(int col =0; col<num; col++){
+
             currentRow.push_back(symbol);
+            
+                
         }
         board.push_back(currentRow);
     }
+
+     
     return board;
 
 }
 
 void printGameBoard(std::vector<std::vector<char>> gameBoard){
+    int count=0;
     for(int i =0; i<gameBoard.size(); i++){
         for(int j =0; j<gameBoard.size(); j++){
-            std::cout<<gameBoard[i][j]<<" ";
+            count++;
+            if (gameBoard[0][0] == 'N' || gameBoard[0][0] == 'n'){
+                std::cout<<std::setw(2)<<count<<" ";
+            }
+            else{
+                std::cout<<gameBoard[i][j]<<" ";
+            }
         }
         std::cout<<"\n";
         
@@ -55,7 +69,6 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
 
     int computerRowNum = computerGuess%size;
     int computerColNum = ((computerGuess))/size;    
-    std::cout<< computerRowNum << computerColNum;
     found = false;
     while(!found){
 
@@ -81,10 +94,9 @@ int main(){
     std::cout << "How many rows and columns do you want for gameboard?"<<std::endl;
     std::cin >> num;
     char symbol;
-    std::cout<<"What symbol would you like to use for gameboard?"<<std::endl;
+    std::cout<<"What symbol would you like to use for gameboard? (N or n for numbers)"<<std::endl;
     std::cin>>symbol;
     std::vector<std::vector<char>> gameBoard = returnGameBoard(num,symbol);
-    
     bool running = true;
 
     while (running){
