@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <cstdlib> 
 
 std::vector<std::vector<char>> returnGameBoard(int num, char symbol){
     std::vector<std::vector<char>> board;
@@ -31,46 +30,47 @@ void printGameBoard(std::vector<std::vector<char>> gameBoard){
 
 std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, std::vector<std::vector<char>> gameBoard){
 
-    
+    num--;
     int rowNum = num%size;
         
-    int colNum = (static_cast<double>(num))/size;    
+    int colNum = ((double)(num))/size;    
 
     bool found = false;
     while(!found){
 
-        if(gameBoard[colNum][rowNum--] != symbol){
+        if(gameBoard[colNum][rowNum] != symbol){
             int newNumber;
             std::cout<<"Please try again that spot is taken"<<std::endl;
             std::cin>> newNumber;
             rowNum = newNumber%size;
-            colNum = (static_cast<double>(newNumber))/size;   
+            colNum = ((double)(newNumber))/size;   
         }
         else{
-            gameBoard[colNum][rowNum--] = 'X';
+            gameBoard[colNum][rowNum] = 'X';
             found=true;
         }
     }
     
-    int computerGuess = (random() % static_cast<int>(num,2));
+    int computerGuess = (rand() % ((int)pow(size,2)));
 
     int computerRowNum = computerGuess%size;
-    int computerColNum = (static_cast<double>(computerGuess))/size;    
-    
+    int computerColNum = ((computerGuess))/size;    
+    std::cout<< computerRowNum << computerColNum;
     found = false;
     while(!found){
 
-        if(gameBoard[computerRowNum--][computerColNum--] != symbol){
-            computerGuess = (random() % static_cast<int>(num,2));
+        if(gameBoard[computerColNum][computerRowNum] != symbol){
+            computerGuess = (rand() % (int)pow(num,2));
 
             computerRowNum = computerGuess%size;
-            computerColNum = (static_cast<double>(computerGuess))/size;    
+            computerColNum = ((computerGuess))/size;    
         }
         else{
-            gameBoard[rowNum--][colNum--] = 'O';
+            gameBoard[computerColNum][computerRowNum] = 'O';
             found=true;
         }
     }
+
     return gameBoard;
 }
 
