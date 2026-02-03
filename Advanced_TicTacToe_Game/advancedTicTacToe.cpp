@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -6,6 +5,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <unistd.h>
+#include <algorithm>
+
+std::vector<std::vector<char>> gameBoard;
+char symbol;
+int size;
 
 std::vector<std::vector<char>> returnGameBoard(int num, char symbol){
     std::vector<std::vector<char>> board;
@@ -45,49 +49,150 @@ void printGameBoard(std::vector<std::vector<char>> gameBoard){
     
 }
 
-int recursiveResults(std::vector<std::vector<char>> gameBoard, int currentCol, int currentRow, char symbol){
+void winnerAndLooser(char player){
+    if (player=='u'){
+        printGameBoard(gameBoard);
+        std::cout<< "Congradulations player, you have won tic tac toe!"<<std::endl;
+        abort();
+    }
+    else{
+        printGameBoard(gameBoard);
+        std::cout<< "Sorry you lost to the computer"<<std::endl;
+        abort();
+    }
+}
 
+int diagonalResults(int currentCol, int currentRow, char player){
+    int result=0;
 
-    if(gameBoard[currentCol][currentRow]=='X' && symbol=='X'){
+    if(currentCol<0 || currentRow<0||currentCol>=gameBoard.size()||currentRow>=gameBoard.size()){
+        return result;
+    }
+
+    if(gameBoard[currentCol][currentRow]=='X' && player=='X'){
         if(currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1){
             return 1;
-
-        }
-        else{
-            int diagonal = recursiveResults(gameBoard, currentCol+1, currentRow+1, symbol);
-            return diagonal;
-
         }
         
     }
 
-    else if(gameBoard[currentCol][currentRow]=='O' && symbol=='O'){
+    else if(gameBoard[currentCol][currentRow]=='O' && player=='O'){
 
-         if(currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1){
+        if(currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1){
             return 2;
 
         }
-        else{
-            int diagonal = recursiveResults(gameBoard,currentCol+1, currentRow+1,symbol);
-            return diagonal;
-        }
 
     }
+    if(gameBoard[currentCol][currentRow]!=symbol){
 
-    return 0;
+        for(int i =0; i<2; i++){
+            if(i==0) result = diagonalResults(currentCol+1, currentRow+1, symbol);
+            else result = diagonalResults(currentCol-1, currentRow+1, symbol);
+               
+            if (result!=0) break;
+        }
+    }
+
+    return result;
 
 
 }
 
-
-int gameResults(std::vector<std::vector<char>> gameBoard){
+int horizontalResults(int currentCol, int currentRow, char player){
     int result=0;
-    if((gameBoard[0][0]=='X' && gameBoard[gameBoard.size()-1][gameBoard.size()-1] == 'X' ) || (gameBoard[0][0]=='O' && gameBoard[gameBoard.size()-1][gameBoard.size()-1] == 'O' )){
-        result = recursiveResults(gameBoard, 0, 0, gameBoard[0][0]);
+
+    if(currentCol<0 || currentRow<0||currentCol>=gameBoard.size()||currentRow>=gameBoard.size()){
+        return result;
+    }
+
+    if(gameBoard[currentCol][currentRow]=='X' && player=='X'){
+        if(currentRow==gameBoard.size()-1){
+            return 1;
+        }
+        
+    }
+
+    else if(gameBoard[currentCol][currentRow]=='O' && player=='O'){
+
+        if(currentRow==gameBoard.size()-1){
+            return 2;
+
+        }
 
     }
-    return result;  
+    if(gameBoard[currentCol][currentRow]!=symbol){
+        result = horizontalResults(currentCol, currentRow+1, symbol);               
+        
+    }
+
+    return result;
+
+
+}
+
+int verticalResults(int currentCol, int currentRow, char player){
+    int result=0;
+
+    if(currentCol<0 || currentRow<0||currentCol>=gameBoard.size()||currentRow>=gameBoard.size()){
+        return result;
+    }
+
+    if(gameBoard[currentCol][currentRow]=='X' && player=='X'){
+        if(currentCol == gameBoard.size()-1){
+            return 1;
+        }
+        
+    }
+
+    else if(gameBoard[currentCol][currentRow]=='O' && player=='O'){
+
+        if(currentCol == gameBoard.size()-1){
+            return 2;
+
+        }
+
+    }
+    if(gameBoard[currentCol][currentRow]!=symbol){
+        result = diagonalResults(currentCol+1, currentRow, symbol);
+    }
+
+    return result;
+
     
+}
+
+
+void gameResults(){
+    
+    for(int i=0; i<2;i++){
+        if(i==0){
+
+            for(int j=0;j<gameBoard.size();j++){
+                
+                if(horizontalResults(j,0,'X')==1 || verticalResults(0,j,'X')==1){
+                    winnerAndLooser('u');
+                }
+            }
+            if(diagonalResults(0,0,'X')==1 || diagonalResults(gameBoard.size()-1,0,'X') == 1){
+                winnerAndLooser('u');
+            }
+            
+        }
+        if(i==2){
+            for(int j=0;j<gameBoard.size();j++){
+                
+                if(horizontalResults(j,0,'O')==1 || verticalResults(0,j,'O')==1){
+                    winnerAndLooser('c');
+                }
+            }
+            if(diagonalResults(0,0,'O')==1 || diagonalResults(gameBoard.size()-1,0,'O') == 1){
+                winnerAndLooser('c');
+            }
+        }
+        
+    }
+
 }
 
 
@@ -97,19 +202,7 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
     int rowNum = num%size;
         
     int colNum = ((double)(num))/size;    
-    int results = gameResults(gameBoard);
-
-    if(results==1){
-        printGameBoard(gameBoard);
-        std::cout<< "Congradulations player, you have won tic tac toe!"<<std::endl;
-        abort();
-    }
-
-    if (results==2){
-        printGameBoard(gameBoard);
-        std::cout<<"Sorry you lost Tic Tac Toe"<<std::endl;
-        abort();
-    }
+    gameResults();
 
     bool found = false;
 
@@ -138,18 +231,14 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
                 filled=false;
                 break;
             }
-                
-
         }
     }
-
 
     if(filled){
         printGameBoard(gameBoard);
         std::cout<<"There is no more space, the game is a draw"<<std::endl;
         abort();
     }
-
 
     int upperBound = ((int)pow(gameBoard.size(),2));
 
@@ -185,14 +274,12 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
 
 int main(){
 
-    int num;
     std::cout<<"Welcome to tic tac toe!"<<std::endl;
     std::cout << "How many rows and columns do you want for gameboard?"<<std::endl;
-    std::cin >> num;
-    char symbol;
+    std::cin >> size;
     std::cout<<"What symbol would you like to use for gameboard? (N or n for numbers)"<<std::endl;
     std::cin>>symbol;
-    std::vector<std::vector<char>> gameBoard = returnGameBoard(num,symbol);
+    gameBoard = returnGameBoard(size,symbol);
     bool running = true;
 
     while (running){
@@ -221,24 +308,14 @@ int main(){
         std::cout<< "You are X, computer is O" <<std::endl;
         
         int userChoice;
-        std::cout << "Pick a number (1-" << pow(num,2)<<")"<<std::endl;
+        std::cout << "Pick a number (1-" << pow(size,2)<<")"<<std::endl;
         std::cin >> userChoice;
         
-        gameBoard= alteredGameBoard(num,userChoice,symbol,gameBoard);
+        gameBoard= alteredGameBoard(size,userChoice,symbol,gameBoard);
         
-        int results = gameResults(gameBoard);
+        gameResults();
 
-        if(results==1){
-            printGameBoard(gameBoard);
-            std::cout<< "Congradulations player, you have won tic tac toe!"<<std::endl;
-            running = false;
-        }
-
-        if (results==2){
-            printGameBoard(gameBoard);
-            std::cout<<"Sorry you lost Tic Tac Toe"<<std::endl;
-            running = false;
-        }
+        
 
 
     }
