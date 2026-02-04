@@ -64,7 +64,7 @@ while True:
                             
                             status = wlan.ifconfig()
                             
-                            url3 = "https://worldtimeapi.org/api/timezone/Pacific/Auckland"
+                            url3 = "https://worldtimeapi.org/api/timezone/Location"
                             
                             for attem in range(10):
                                 
@@ -166,7 +166,7 @@ while True:
                             
                             status = wlan.ifconfig()
                             
-                            url = "https://api.open-meteo.com/v1/forecast?latitude=-40.8567&longitude=175.0004&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&precipitation_unit=mm&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"
+                            url = "https://api.open-meteo.com/v1/forecast?latitude=-latitude&longitude=longitude&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&precipitation_unit=mm&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"
                             
                             for attem in range(10):
                                 
@@ -326,7 +326,7 @@ while True:
                                                         
                                                         status = wlan.ifconfig()
                                                         
-                                                        url2="https://worldtimeapi.org/api/timezone/Pacific/Auckland"
+                                                        url2="https://worldtimeapi.org/api/timezone/Location"
                                                         
                                                         for att in range(10):
                                                             
