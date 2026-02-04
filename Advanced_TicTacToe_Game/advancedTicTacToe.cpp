@@ -31,13 +31,53 @@ std::vector<std::vector<char>> returnGameBoard(int num, char symbol){
 
 }
 
-void printGameBoard(std::vector<std::vector<char>> gameBoard){
+void fill(){
+
+    bool filled=true;
+    for(int col=0; col<gameBoard.size(); col++){
+
+        for(int row=0; row<gameBoard.size(); row++){
+            if(gameBoard[col][row]==symbol){
+
+                filled=false;
+                break;
+            }
+                    
+        }
+    }
+
+
+    if(filled){
+        std::cout<<"There is no more space, the game is a draw"<<std::endl;
+        abort();
+    }
+
+}
+
+void printGameBoard(){
     int count=0;
     for(int i =0; i<gameBoard.size(); i++){
         for(int j =0; j<gameBoard.size(); j++){
             count++;
-            if ((gameBoard[0][0] == 'N' || gameBoard[0][0] == 'n') && gameBoard[i][j] !='X' && gameBoard[i][j]!='O'){
-                std::cout<<std::setw(2)<<count<<" ";
+            bool numFound=false;
+
+            for(auto current:gameBoard){
+
+                if(std::count(current.begin(),current.end(),'N')>0 || std::count(current.begin(),current.end(),'n')>0){
+                    numFound=true; 
+                    break;
+                }
+
+            }
+            if (numFound){
+                
+                if(gameBoard[i][j] == 'X' || gameBoard[i][j] == 'O') {                
+                    std::cout<<std::setw(2)<<gameBoard[i][j]<<" ";
+                }
+                else{
+                    std::cout<<std::setw(2)<<count<<" ";
+                }
+
             }
             else{
                 std::cout<<gameBoard[i][j]<<" ";
@@ -51,12 +91,12 @@ void printGameBoard(std::vector<std::vector<char>> gameBoard){
 
 void winnerAndLooser(char player){
     if (player=='u'){
-        printGameBoard(gameBoard);
+        printGameBoard();
         std::cout<< "Congradulations player, you have won tic tac toe!"<<std::endl;
         abort();
     }
     else{
-        printGameBoard(gameBoard);
+        printGameBoard();
         std::cout<< "Sorry you lost to the computer"<<std::endl;
         abort();
     }
@@ -84,7 +124,7 @@ int diagonalResults(int currentCol, int currentRow, char player){
         }
 
     }
-    if(gameBoard[currentCol][currentRow]!=symbol){
+    if(gameBoard[currentCol][currentRow]==player){
 
         for(int i =0; i<2; i++){
             if(i==0) result = diagonalResults(currentCol+1, currentRow+1, player);
@@ -121,8 +161,8 @@ int horizontalResults(int currentCol, int currentRow, char player){
         }
 
     }
-    if(gameBoard[currentCol][currentRow]!=symbol){
-        result = horizontalResults(currentCol, currentRow+1, symbol);               
+    if(gameBoard[currentCol][currentRow]==player){
+        result = horizontalResults(currentCol, currentRow+1, player);               
         
     }
 
@@ -153,8 +193,8 @@ int verticalResults(int currentCol, int currentRow, char player){
         }
 
     }
-    if(gameBoard[currentCol][currentRow]!=symbol){
-        result = diagonalResults(currentCol+1, currentRow, symbol);
+    if(gameBoard[currentCol][currentRow]==player){
+        result = verticalResults(currentCol+1, currentRow, player);
     }
 
     return result;
@@ -182,11 +222,11 @@ void gameResults(){
         else{
             for(int j=0;j<gameBoard.size();j++){
                 
-                if(horizontalResults(j,0,'O')==1 || verticalResults(0,j,'O')==1){
+                if(horizontalResults(j,0,'O')==2|| verticalResults(0,j,'O')==2){
                     winnerAndLooser('c');
                 }
             }
-            if(diagonalResults(0,0,'O')==1 || diagonalResults(gameBoard.size()-1,0,'O') == 1){
+            if(diagonalResults(0,0,'O')==2|| diagonalResults(gameBoard.size()-1,0,'O') == 2){
                 winnerAndLooser('c');
             }
         }
@@ -196,7 +236,7 @@ void gameResults(){
 }
 
 
-std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, std::vector<std::vector<char>> gameBoard){
+void alteredGameBoard(int size, int num,char symbol){
 
     num--;
     int rowNum = num%size;
@@ -209,7 +249,7 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
     while(!found){
 
         if(gameBoard[colNum][rowNum] != symbol){
-            printGameBoard(gameBoard);
+            printGameBoard();
             int newNumber;
             std::cout<<"Please try again that spot is taken"<<std::endl;
             std::cin>> newNumber;
@@ -222,25 +262,8 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
         }
     }
     
-    bool filled=true;
-    for(int col=0; col<gameBoard.size(); col++){
-
-        for(int row=0; row<gameBoard.size(); row++){
-            if(gameBoard[col][row]==symbol){
-
-                filled=false;
-                break;
-            }
-        }
-    }
-
-    if(filled){
-        printGameBoard(gameBoard);
-        std::cout<<"There is no more space, the game is a draw"<<std::endl;
-        abort();
-    }
-
     gameResults();
+    fill();
 
     int upperBound = ((int)pow(gameBoard.size(),2));
 
@@ -268,57 +291,34 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
             found=true;
         }
     }
+    gameResults();
 
-    return gameBoard;
 }
 
 
 
 int main(){
-
+    
     std::cout<<"Welcome to tic tac toe!"<<std::endl;
     std::cout << "How many rows and columns do you want for gameboard?"<<std::endl;
     std::cin >> size;
-    std::cout<<"What symbol would you like to use for gameboard? (N or n for numbers)"<<std::endl;
+    std::cout<<"What symbol would you like to use for gameboard? (N or n for numbers in ascending order)"<<std::endl;
     std::cin>>symbol;
     gameBoard = returnGameBoard(size,symbol);
     bool running = true;
 
     while (running){
 
-        bool filled=true;
-        for(int col=0; col<gameBoard.size(); col++){
-
-            for(int row=0; row<gameBoard.size(); row++){
-                if(gameBoard[col][row]==symbol){
-
-                    filled=false;
-                    break;
-                }
-                    
-
-            }
-        }
-
-
-        if(filled){
-            std::cout<<"There is no more space, the game is a draw"<<std::endl;
-            abort();
-        }
-
-        printGameBoard(gameBoard);
+        fill();
+        printGameBoard();
         std::cout<< "You are X, computer is O" <<std::endl;
         
         int userChoice;
         std::cout << "Pick a number (1-" << pow(size,2)<<")"<<std::endl;
         std::cin >> userChoice;
         
-        gameBoard= alteredGameBoard(size,userChoice,symbol,gameBoard);
+        alteredGameBoard(size,userChoice,symbol);
         
         gameResults();
-
-        
-
-
     }
 }
