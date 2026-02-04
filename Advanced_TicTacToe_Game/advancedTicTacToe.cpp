@@ -70,7 +70,7 @@ int diagonalResults(int currentCol, int currentRow, char player){
     }
 
     if(gameBoard[currentCol][currentRow]=='X' && player=='X'){
-        if(currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1){
+        if((currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1) || (currentCol == 0 && currentRow==gameBoard.size()-1)){
             return 1;
         }
         
@@ -78,7 +78,7 @@ int diagonalResults(int currentCol, int currentRow, char player){
 
     else if(gameBoard[currentCol][currentRow]=='O' && player=='O'){
 
-        if(currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1){
+        if((currentCol == gameBoard.size()-1 && currentRow==gameBoard.size()-1) || (currentCol == 0 && currentRow==gameBoard.size()-1)){
             return 2;
 
         }
@@ -87,8 +87,8 @@ int diagonalResults(int currentCol, int currentRow, char player){
     if(gameBoard[currentCol][currentRow]!=symbol){
 
         for(int i =0; i<2; i++){
-            if(i==0) result = diagonalResults(currentCol+1, currentRow+1, symbol);
-            else result = diagonalResults(currentCol-1, currentRow+1, symbol);
+            if(i==0) result = diagonalResults(currentCol+1, currentRow+1, player);
+            else result = diagonalResults(currentCol-1, currentRow+1, player);
                
             if (result!=0) break;
         }
@@ -169,7 +169,7 @@ void gameResults(){
         if(i==0){
 
             for(int j=0;j<gameBoard.size();j++){
-                
+
                 if(horizontalResults(j,0,'X')==1 || verticalResults(0,j,'X')==1){
                     winnerAndLooser('u');
                 }
@@ -179,7 +179,7 @@ void gameResults(){
             }
             
         }
-        if(i==2){
+        else{
             for(int j=0;j<gameBoard.size();j++){
                 
                 if(horizontalResults(j,0,'O')==1 || verticalResults(0,j,'O')==1){
@@ -239,6 +239,8 @@ std::vector<std::vector<char>> alteredGameBoard(int size, int num,char symbol, s
         std::cout<<"There is no more space, the game is a draw"<<std::endl;
         abort();
     }
+
+    gameResults();
 
     int upperBound = ((int)pow(gameBoard.size(),2));
 
