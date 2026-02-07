@@ -15,3 +15,16 @@ To give the user options over the desired information being indicated on screen,
   <img src="images/closeupWeatherStation2.jpg" alt="Image 2" width="650" />
 </p>
 
+Button 1
+: When device has just turned on, by pressing button 1, it will switch from showing the weather to showing the current time and data, if pressed again from here, it will then switch back to weather and vice versa.
+
+Button 2
+: When button 2 is pressed it will either turn the display on and off, it has the additional function of restarting the device if need be
+
+<p align="center">
+  <img src="images/clock.png" alt="Image 2" width="400" />
+</p>
+
+--- 
+
+## *Advanced Tic Tac Toe Game*
