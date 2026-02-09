@@ -110,8 +110,9 @@ int main(){
         bool allowed = false;
         if(userInput == "login" && !allowed){
             bool usernameFound = false;
+            bool finished= false;
             std::vector<long long> currentCipher;
-                while(!usernameFound){
+                while(!usernameFound && !finished){
                     std::string username="";
                     std::cout << "Please enter your Username (just type X to exit)"<<std::endl;
                     std::cin>>username;
@@ -122,27 +123,43 @@ int main(){
                         if(reader.is_open()){
                             std::string line;
                             while(std::getline(reader,line)){
+                                std::cout<<line<<std::endl;
+                                
                                 std::string currentuserName;
                                 
                                 int count=0;
                                 for(auto ch: line){
+                                    std::cout<<ch<<std::endl;
+                                    std::cout<<"size: "<<username.size()-1<<std::endl;
+                                    std::cout<<"count: "<<count<<std::endl;
 
-                                    if(!usernameFound && username[count] == ch){
+                                    
+
+                                    if(usernameFound){
+                                        std::cout<<"I am in here"<<std::endl;
+                                        currentCipher.push_back((long long)ch);
+                                    }
+                                    else if(!usernameFound && username[count]!=ch){
+                                        count=0;
+                                        break;
+                                    }
+                                    if(!usernameFound && username[count] == ch && count<username.size()){
                                         currentuserName = currentuserName+ch;
+                                        std::cout<<currentuserName<<std::endl;
+                                        std::cout<<username<<std::endl;
                                         if(username==currentuserName){
                                             usernameFound=true;
                                             break;
                                         }
-                                    }
-
-                                    else if(usernameFound){
-                                        currentCipher.push_back((long long)ch);
+                                        count++;
                                     }
                                     
-                                    count++;
+                                    
+                                    
 
                                 }
                                 if(usernameFound){
+                                    finished =true;
                                     break;
                                 }
 
@@ -151,22 +168,35 @@ int main(){
 
                         }
                         reader.close();
-                    }else{abort();}
+                    }else{
+                        std::cout<<"Something went wrong please try again"<<std::endl;
+                        abort();}
                 }
                 
                 std::string userPassword;
+                disableEcho();
                 std::cout<<"Please enter your password"<<std::endl;
+               
+                disableEcho();
                 std::cin>>userPassword;
+                enableEcho();
                 long long predictedD, predictedN;
                 std::cout<<"Please enter the first number(order does not matter)"<<std::endl;
                 std::cin>>predictedD;
                 std::cout<<"Please enter the second number"<<std::endl;
                 std::cin>>predictedN;
+                for (long long c : currentCipher) {
+                    std::cout<<c<<" ";
+                }
+                std::cout<<"hello"<<std::endl;
                 std::string predictedPassword = decrypt(currentCipher, predictedD, predictedN);
+                std::cout<<predictedPassword<<std::endl;
                 if(predictedPassword!=userPassword){
                     predictedPassword = decrypt(currentCipher, predictedN, predictedD);
+                    std::cout<<predictedPassword<<std::endl;
                     if(predictedPassword!=userPassword){
                         userInput="login";
+                        finished = false;
                     }
                     else{
                         allowed=true;
@@ -182,7 +212,6 @@ int main(){
             std::string username = "";
             std::cout << "\n\nWelcome to the sign up Page\nWhat is your username?"<<std::endl;
             std::cin >> username;
-            std::transform(username.begin(), username.end(),username.begin(),[](unsigned char c){return std::tolower(c);});
             std::string password="";
 
             bool allowed = false;
@@ -227,7 +256,7 @@ int main(){
         } 
 
         if(allowed){
-
+            std::cout<<"yay u made it";
         }
 
     }
