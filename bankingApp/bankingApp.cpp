@@ -11,92 +11,52 @@
 #include <ctime>
 #include <fstream>
 
-long long gcd(long long a, long long b) {
-    return (b == 0) ? a : gcd(b, a % b);
-}
+class Bank{
 
+    private:
+        std::string username;   
+        double bankBalance;
+        double interestRate;
+        std::vector<std::string> savedContacts;
 
-long long modInverse(long long a, long long m) {
-    for (long long x = 1; x < m; x++) {
-        if ((a * x) % m == 1) {
-            return x;
-        }
-    }
-    return -1; 
-}
-
-
-bool isPrime(long long num) {
-    if (num <= 1) return false;
-    for (long long i = 2; i <= std::sqrt(num); i++) {
-        if (num % i == 0) return false;
-    }
-    return true;
-}
-
-
-long long generatePrime() {
-    long long prime;
-    while (true) {
-        prime = rand() % 100 + 2;  
-        if (isPrime(prime)) return prime;
-    }
-}
-
-void generateKeys(long long &n, long long &e, long long &d) {
-    long long p = generatePrime();
-    long long q = generatePrime();
-    n = p * q;
-    long long phi = (p - 1) * (q - 1);
     
-    e = 65537;  
-    d = modInverse(e, phi);
-}
+    public:
 
-
-std::vector<long long> encrypt(const std::string &message, long long e, long long n) {
-    std::vector<long long> cipher;
-    for (char ch : message) {
-        long long m = static_cast<long long>(ch); 
-        long long c = 1;
-        for (long long i = 0; i < e; i++) {
-            c = (c * m) % n;
+        Bank(std::string username = "Test", double bankBalance=10000, double interestRate=0.0435, std::vector<std::string> savedContacts ={}){
+            this->username=username;
+            this->bankBalance= bankBalance;
+            this->interestRate = interestRate;
+            this->savedContacts=savedContacts;
         }
-        cipher.push_back(c); 
-    }
-    return cipher;
-}
 
 
-std::string decrypt(const std::vector<long long> &cipher, long long d, long long n) {
-    std::string message;
-    for (long long c : cipher) {
-        long long m = 1;
-        for (long long i = 0; i < d; i++) {
-            m = (m * c) % n;
-        }
-        message.push_back(static_cast<char>(m)); 
-    }
-    return message;
-}
+};
+
 
 void disableEcho() {
     termios ttystate;
     tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag &= ~ECHO;          // Disable echo
+    ttystate.c_lflag &= ~ECHO;          
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
 }
 
 void enableEcho() {
     termios ttystate;
     tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag |= ECHO;           // Enable echo
+    ttystate.c_lflag |= ECHO;          
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
 }
 
+void loggedIn(){
+
+    
+
+}
+
+
 int main(){
 
-
+    system("clear");
     bool running = true;
 
     while (running){
@@ -106,13 +66,12 @@ int main(){
 
         std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
 
-        std::cout << userInput<<std::endl;
-        bool allowed = false;
-        if(userInput == "login" && !allowed){
+        if(userInput == "login"){
             bool usernameFound = false;
             bool finished= false;
-            std::vector<long long> currentCipher;
-                while(!usernameFound && !finished){
+            std::string password;
+
+                while(!usernameFound || !finished){
                     std::string username="";
                     std::cout << "Please enter your Username (just type X to exit)"<<std::endl;
                     std::cin>>username;
@@ -122,49 +81,43 @@ int main(){
                         
                         if(reader.is_open()){
                             std::string line;
+
                             while(std::getline(reader,line)){
-                                std::cout<<line<<std::endl;
                                 
-                                std::string currentuserName;
+                                std::string currentuserName="";
                                 
                                 int count=0;
-                                for(auto ch: line){
-                                    std::cout<<ch<<std::endl;
-                                    std::cout<<"size: "<<username.size()-1<<std::endl;
-                                    std::cout<<"count: "<<count<<std::endl;
+                                for(int i =0; i<line.size();i++){
 
+                                    char c = line[i];
+                                    std::string ch;
+                                    ch.push_back(c);
                                     
+                                    if(i==0){count=0; currentuserName=""; password="";}
 
-                                    if(usernameFound){
-                                        std::cout<<"I am in here"<<std::endl;
-                                        currentCipher.push_back((long long)ch);
-                                    }
-                                    else if(!usernameFound && username[count]!=ch){
-                                        count=0;
-                                        break;
-                                    }
-                                    if(!usernameFound && username[count] == ch && count<username.size()){
-                                        currentuserName = currentuserName+ch;
-                                        std::cout<<currentuserName<<std::endl;
-                                        std::cout<<username<<std::endl;
+                                    if(username[count] == ch[0] && !usernameFound){
+                                        currentuserName=currentuserName+ch[0];
                                         if(username==currentuserName){
                                             usernameFound=true;
-                                            break;
                                         }
                                         count++;
+
                                     }
-                                    
-                                    
-                                    
+                                    else if(usernameFound){
+                                        password = password + c;
+                                    }
 
                                 }
+
                                 if(usernameFound){
-                                    finished =true;
-                                    break;
+                                    reader.close();
+                                    finished=true;
+                                    
                                 }
+                            
 
                             }
-
+                            finished =true;
 
                         }
                         reader.close();
@@ -173,39 +126,29 @@ int main(){
                         abort();}
                 }
                 
+        
+
                 std::string userPassword;
-                disableEcho();
                 std::cout<<"Please enter your password"<<std::endl;
-               
+                
+
                 disableEcho();
                 std::cin>>userPassword;
                 enableEcho();
-                long long predictedD, predictedN;
-                std::cout<<"Please enter the first number(order does not matter)"<<std::endl;
-                std::cin>>predictedD;
-                std::cout<<"Please enter the second number"<<std::endl;
-                std::cin>>predictedN;
-                for (long long c : currentCipher) {
-                    std::cout<<c<<" ";
-                }
-                std::cout<<"hello"<<std::endl;
-                std::string predictedPassword = decrypt(currentCipher, predictedD, predictedN);
-                std::cout<<predictedPassword<<std::endl;
-                if(predictedPassword!=userPassword){
-                    predictedPassword = decrypt(currentCipher, predictedN, predictedD);
-                    std::cout<<predictedPassword<<std::endl;
-                    if(predictedPassword!=userPassword){
-                        userInput="login";
-                        finished = false;
-                    }
-                    else{
-                        allowed=true;
-                    }
-                }
-                else{allowed=true;}
+                
+                if(userPassword==password){
 
+                    std::cout<<"You are now logged in"<<std::endl;
+                    loggedIn();
+
+
+                }
+                else{
+                    std::cout<<"PLease try again"<<std::endl;
+                    usernameFound=false;
+                    finished=false;
+                }
         }
-            
         
         else if(userInput=="sign up"){
             srand(time(NULL));
@@ -220,7 +163,6 @@ int main(){
                 disableEcho();
                 std::cin>>password;
                 enableEcho();
-                std::cout<<password.size()<<std::endl;
                 if(password.size()>=6 &&(password.find("!")!=std::string::npos || password.find("@")!=std::string::npos || password.find("#")!=std::string::npos || password.find("$") !=std::string::npos|| password.find("%")!=std::string::npos|| password.find("^")!=std::string::npos || password.find("&") !=std::string::npos|| password.find("*") !=std::string::npos|| password.find("(") !=std::string::npos|| password.find(")") !=std::string::npos|| password.find(",") !=std::string::npos|| password.find(".")!=std::string::npos || password.find("/") !=std::string::npos|| password.find("~")!=std::string::npos ) && (password.find("1") !=std::string::npos|| password.find("2") !=std::string::npos|| password.find("3") !=std::string::npos|| password.find("4") !=std::string::npos|| password.find("5") !=std::string::npos|| password.find("6") !=std::string::npos|| password.find("7") !=std::string::npos|| password.find("8")!=std::string::npos || password.find("9")!=std::string::npos)){
                     allowed= true;
                 }
@@ -228,38 +170,25 @@ int main(){
                     std::cout<<"Password does not meet specifications, please try again"<<std::endl;
                 }
             }
-            long long n, e, d;
-            generateKeys(n, e, d);
-            
-            std::vector<long long> cipher = encrypt(password, e, n);
-            
-            std::ofstream writer("passwords.txt");
-            writer<<username;
-            for (long long c : cipher) {
-                writer<<c;
+
+            std::ofstream writer;
+            writer.open("passwords.txt",std::ios::app);
+
+            if(!writer){
+                std::cout<<"error opening file"<<std::endl;
+                return 1;
             }
+            writer<<username + password + '\n';
             writer.close();
-            std::cout<<"The following numbers are for you to remeber: "<< e<<" " << n<<std::endl;
 
-            bool finalized = false;
+            std::cout<<"You're account has been created, you may now attempt to login"<<std::endl;
 
-            while (!finalized){
-                std::cout<<"Have you written down and or stored the numbers someplace securly? (Y/N)"<<std::endl;
-                std::cin >> userInput;
-                std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
 
-                if(userInput=="yes" || userInput=="y"){
-                    std::cout<<"Great! You will now go through the process of logging in"<<std::endl;
-                    finalized = true;
-                }   
-            }
         } 
 
-        if(allowed){
-            std::cout<<"yay u made it";
-        }
+    }   
 
-    }
+
     return 0;
 
 }
