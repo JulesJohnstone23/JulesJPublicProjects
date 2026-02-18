@@ -4,12 +4,63 @@
 #include <cctype>
 #include <vector>
 #include <iostream>
-#include <termios.h>
 #include <unistd.h>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+
+bool isOSLinux = true;
+
+#ifdef __WIN32
+    #include <windows.h>
+
+    void clear(){
+        system("cls");
+    }
+    void disableEcho() {
+        HANDLE hConsole = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode;
+
+        GetConsoleMode(hConsole, &mode);
+        
+        SetConsoleMode(hConsole, mode & ~ENABLE_ECHO_INPUT);
+    }
+
+    void enableEcho() {
+        HANDLE hConsole = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD mode;
+
+        GetConsoleMode(hConsole, &mode);
+        
+        SetConsoleMode(hConsole, mode | ENABLE_ECHO_INPUT);
+    }
+
+
+
+
+#else  
+    #include <termios.h>
+    void clear(){
+        system("clear");
+    }
+
+    void disableEcho() {
+        termios ttystate;
+        tcgetattr(STDIN_FILENO, &ttystate);
+        ttystate.c_lflag &= ~ECHO;          
+        tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
+    }
+
+    void enableEcho() {
+        termios ttystate;
+        tcgetattr(STDIN_FILENO, &ttystate);
+        ttystate.c_lflag |= ECHO;          
+        tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
+    }
+
+#endif
+
 
 class Bank{
 
@@ -33,19 +84,7 @@ class Bank{
 };
 
 
-void disableEcho() {
-    termios ttystate;
-    tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag &= ~ECHO;          
-    tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-}
 
-void enableEcho() {
-    termios ttystate;
-    tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag |= ECHO;          
-    tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-}
 
 void loggedIn(){
 
@@ -56,7 +95,7 @@ void loggedIn(){
 
 int main(){
 
-    system("clear");
+    clear();
     bool running = true;
 
     while (running){
