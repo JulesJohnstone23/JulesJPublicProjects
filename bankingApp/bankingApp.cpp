@@ -62,34 +62,124 @@ bool isOSLinux = true;
 #endif
 
 
+        //if check all contacts have it so user can sort alphabetically, or sort by their balance
+/*
+    have program run as a simulation, as in time, eg term deposit actually compounds over time, have it so that time is either determined by computer time
+    and have this saved in a txt file.
+
+*/
+
+enum Outputs{checkbalance = 0, deposit=1, checktermdeposit=2,maketermdeposit=3, makeapayment=4, checkallcontacts=5,addnewcontact=6};
+
 class Bank{
 
     private:
         std::string username;   
-        double bankBalance;
-        double interestRate;
-        std::vector<std::string> savedContacts;
+        double bankBalance=100.0;
+        double interestRate=0.0;
+        std::vector<std::string> savedContacts={};
+        std::string password;
+        double termDepositBalance=0.0;
 
     
     public:
 
-        Bank(std::string username = "Test", double bankBalance=10000, double interestRate=0.0435, std::vector<std::string> savedContacts ={}){
+        Bank(std::string username = "Test", std::string password = "password"){
             this->username=username;
             this->bankBalance= bankBalance;
             this->interestRate = interestRate;
             this->savedContacts=savedContacts;
         }
 
+        void checkBalance(){
+            std::cout<<"You're balance is: $"<<bankBalance<<std::endl;
+        }
+
+        void checkTermDeposit(){
+
+            if(termDepositBalance==0.0){
+                std::cout<<"You do not have a term deposit"<<std::endl;
+            }
+            else{
+                std::cout<<"You're current term deposit value is"<< termDepositBalance<<std::endl;
+            }
+
+        }
+
+        
+
 
 };
 
 
+Outputs convert(std::string userInput){
 
-
-void loggedIn(){
-
+    if(userInput=="checkbalance"){
+        return checkbalance;
+    }
+    else if(userInput== "deposit"){
+        return deposit;
+    }
+    else if(userInput=="checktermdeposit"){
+        return checktermdeposit;
+    }
+    else if(userInput=="maketermdeposit"){
+        return maketermdeposit;
+    }
+    else if(userInput=="makeapayment"){
+        return makeapayment;
+    }
+    else if(userInput=="checkallcontacts"){
+        return checkallcontacts;
+    }
+    else{
+        return addnewcontact;
+    }
     
 
+}
+
+void loggedIn(std::string username, std::string password){
+
+    
+    Bank user(username, password);
+
+    bool running = true;
+    while (running){
+        std::string userInput="";
+        std::cout<<"You are now logged in"<<'\n'<<"What would you like to do?"<<'\n'<<"    - Check Balance"<<'\n'<<"    - "<<'\n'<<"    - Deposit"<<'\n'<<"    - Check Term deposit"<<'\n'<<"    - Make term deposit"<<'\n'<<"    - Make a payment"<<'\n'<<"    - Check all contacts"<<'\n'<<"    - Add new Contact"<<std::endl;
+        std::cin >> userInput;
+        std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
+        userInput.erase(std::remove(userInput.begin(), userInput.end(), ' '), userInput.end());        
+        Outputs userChoice = convert(userInput);
+
+        switch(userChoice){
+
+
+            case checkbalance:
+                user.checkBalance();
+                break;
+            case deposit:
+                break;
+            case checktermdeposit:
+                break;
+            case maketermdeposit:
+                break;
+            case makeapayment:
+                break;
+            case checkallcontacts:
+                break;
+            case addnewcontact:
+                break;
+            
+        }
+
+        //srand(time(0));
+        //double randomNum = (double)rand()/0.05;
+
+
+
+    }
 }
 
 
@@ -109,9 +199,10 @@ int main(){
             bool usernameFound = false;
             bool finished= false;
             std::string password;
+            std::string username="";
 
                 while(!usernameFound || !finished){
-                    std::string username="";
+        
                     std::cout << "Please enter your Username (just type X to exit)"<<std::endl;
                     std::cin>>username;
                     if(username != "X" && username!="x"){
@@ -177,8 +268,7 @@ int main(){
                 
                 if(userPassword==password){
 
-                    std::cout<<"You are now logged in"<<std::endl;
-                    loggedIn();
+                    loggedIn(username,userPassword);
 
 
                 }
