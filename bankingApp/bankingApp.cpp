@@ -10,6 +10,7 @@
 #include <ctime>
 #include <fstream>
 
+
 bool isOSLinux = true;
 
 #ifdef __WIN32
@@ -63,11 +64,6 @@ bool isOSLinux = true;
 
 
         //if check all contacts have it so user can sort alphabetically, or sort by their balance
-/*
-    have program run as a simulation, as in time, eg term deposit actually compounds over time, have it so that time is either determined by computer time
-    and have this saved in a txt file.
-
-*/
 
 enum Outputs{checkbalance = 0, deposit=1, checktermdeposit=2,maketermdeposit=3, makeapayment=4, checkallcontacts=5,addnewcontact=6};
 
@@ -92,6 +88,7 @@ class Bank{
             this->interestRate = interestRate;
             this->savedContacts=savedContacts;
             if(savedContacts.size()==0){
+
                 std::ifstream reader("savedContacts.txt");
                 bool found = false;
                 if(reader.is_open()){
@@ -152,7 +149,99 @@ class Bank{
 
                 }
             }
+        
+            std::string year="";
+            std::string month="";
+            std::string day ="";
+            std::string hour="";
+            std::string min="";
+            std::string termDepositBalanceValue="";
+            std::string interestRateValue="";
+            std::string termDepositTimeValue="";
+            std::ifstream reader("termDeposit.txt");
+            bool found = false;
+            if(reader.is_open()){
+                std::string line;
+                int count=0;
+                
+                while(std::getline(reader,line)){
+                                
+                    std::string currentContact="";
+                    if(line.find(username)!=std::string::npos){  
+                        
+                        for(auto ch: line){
+                            if(ch==':'){
+                                found=true;
+                            }
+                            else if(found){
+                                if(ch!=','){
+                                    switch(count){
+                                        case 0:
+                                            termDepositBalanceValue=termDepositBalanceValue+ch;
+                                            break;
+                                        case 1: 
+                                            interestRateValue=interestRateValue+ch;
+                                            break;  
+                                        case 2:
+                                            termDepositTimeValue=termDepositTimeValue+ch;
+                                            break;
+                                        case 3:
+                                            year=year+ch;
+                                            break;
+                                        case 4:
+                                            month = month+ch;
+                                            break;
+                                        case 5:
+                                            day = day+ch;
+                                            break;
+                                        case 6:
+                                            hour=hour+ch;
+                                            break;
+                                        case 7:
+                                            min = min +ch;
+                                            break;
+
+                                    }
+
+                                }
+                                else{
+                                    count++;
+                                    
+                                }
+                            }
+                        }
+                        std::cout<<'\n';
+                    }
+                }
+            }
+            reader.close();
+            if(found){
+                double newInterestRate=0.0;
+                int newTermDepositTime=0;
+                double newTermDepositBalance=0.0;
+
+                double expectedTermDeposit = round(stod(termDepositBalanceValue) * pow((1.0+(stod(interestRateValue)/100.0)),(stod(termDepositTimeValue)/12.0)));
+
+            //    std::cout<<"term deposit balance: "<<termDepositBalanceValue<<" interest rate: "<<interestRateValue<<" term deposit time: "<<termDepositTimeValue<<" Expected term deposit amount at end of term: "<<expectedTermDeposit<<'\n';
+
+                time_t timeDate;
+                time(&timeDate);
+                struct tm *localTime = localtime(&timeDate);
+                int currentYear = localTime->tm_year+1900;
+                int currentMonth = localTime->tm_mon +1;
+                int currentDay = localTime->tm_mday;
+                int netDifferenceMonths = ((currentYear-stod(year))*12) + (currentMonth-stod(month)) + ((currentDay-stod(day))/12);
+                effectiveTermDepositBalance =((expectedTermDeposit-stod(termDepositBalanceValue)) *(netDifferenceMonths/stod(month))) + stod(termDepositBalanceValue);
+
+                if(netDifferenceMonths>=stod(month)){
+                    termDepositBalance=effectiveTermDepositBalance;
+                }
+                else{
+                    termDepositBalance=stod(termDepositBalanceValue);
+                }
+            }
             
+
         }
 
         
@@ -167,7 +256,14 @@ class Bank{
             for(auto contact : savedContacts){
                 std::cout<<contact<<std::endl;
             }
-            
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::string userInput="";
+            std::cout<<"Do you wish to sort your contact list? If so please enter one of the following(N to exit)\n"<<"    - Sort Alphebetically\n"<<"    - Sort by bank balance"<<std::endl;
+            std::cin>>userInput;
+            std::getline(std::cin, userInput);
+            userInput.erase(std::remove(userInput.begin(), userInput.end(), ' '), userInput.end());  
+            std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
+       
 
         }
 
@@ -205,10 +301,13 @@ class Bank{
             int year = localTime->tm_year+1900;
             int month = localTime->tm_mon +1;
             int day = localTime->tm_mday;
+            int hour = localTime->tm_hour;
+            int min= localTime->tm_min;
+
             
 
 
-            writer<<username<<":"<<termDepositBalance<<","<<interestRate<<","<<termDepositTime<<","<<year<<","<<month<<","<<day<<","<<'\n';
+            writer<<username<<":"<<termDepositBalance<<","<<interestRate<<","<<termDepositTime<<","<<year<<","<<month<<","<<day<<","<<hour<<","<<min<<","<<'\n';
             writer.close();
 
 
@@ -275,7 +374,6 @@ class Bank{
             }
             
             else{std::cout<<"Contact has not been succesfully added, try again"<<std::endl;}
-
         }
 
 
@@ -316,10 +414,9 @@ void loggedIn(std::string username, std::string password){
 
     bool running = true;
     while (running){
-        
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::string userInput="";
         std::cout<<"You are logged in"<<'\n'<<"What would you like to do?"<<'\n'<<"    - Check Balance"<<'\n'<<"    - Deposit"<<'\n'<<"    - Check Term deposit"<<'\n'<<"    - Make term deposit"<<'\n'<<"    - Make a payment"<<'\n'<<"    - Check all contacts"<<'\n'<<"    - Add new Contact"<<std::endl;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         std::getline(std::cin, userInput);
         userInput.erase(std::remove(userInput.begin(), userInput.end(), ' '), userInput.end());  
@@ -352,9 +449,7 @@ void loggedIn(std::string username, std::string password){
         }
 
 
-        //srand(time(0));
-        //double randomNum = (double)rand()/0.05;
-
+        
 
 
     }
