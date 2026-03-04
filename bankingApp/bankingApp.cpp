@@ -221,9 +221,6 @@ class Bank{
                 double newTermDepositBalance=0.0;
 
                 double expectedTermDeposit = round(stod(termDepositBalanceValue) * pow((1.0+(stod(interestRateValue)/100.0)),(stod(termDepositTimeValue)/12.0)));
-
-            //    std::cout<<"term deposit balance: "<<termDepositBalanceValue<<" interest rate: "<<interestRateValue<<" term deposit time: "<<termDepositTimeValue<<" Expected term deposit amount at end of term: "<<expectedTermDeposit<<'\n';
-
                 time_t timeDate;
                 time(&timeDate);
                 struct tm *localTime = localtime(&timeDate);
@@ -251,19 +248,43 @@ class Bank{
         }
 
         void checkAllContacts(){
-            std::cout<<"Saved contact size: "<<savedContacts.size()<<std::endl;
-            std::cout<<"The following are your contacts"<<std::endl;
-            for(auto contact : savedContacts){
-                std::cout<<contact<<std::endl;
+            bool running = true;
+            while(running){
+
+                std::string userInput="";
+                std::cout<<"Do you wish to sort your contact list? If so please enter one of the following(N to exit)\n"<<"    - Sort Alphebetically\n"<<"    - Sort by bank balance"<<'\n'<<"    - List"<<std::endl;
+                std::cin>>userInput;
+                std::getline(std::cin, userInput);
+                userInput.erase(std::remove(userInput.begin(), userInput.end(), ' '), userInput.end());  
+                std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
+                std::cout<<"userinput: "<<userInput<<std::endl;
+
+                if(userInput.find("alphabetically")!=std::string::npos ){
+
+
+                    std::vector<std::string> sortedContacts = savedContacts;
+                    std::sort(sortedContacts.begin(), sortedContacts.end());
+                    for(auto ch : sortedContacts){
+                        std::cout<<ch<<std::endl;
+                    }
+                    
+
+                }
+
+                else if(userInput.find("bank")!=std::string::npos ){
+
+                }
+                else if(userInput.find("list")!=std::string::npos ){
+                    for(auto contact : savedContacts){
+                        std::cout<<contact<<std::endl;
+                    }
+                }
+                else if(userInput=="n"){
+                    running = false;
+                }
             }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::string userInput="";
-            std::cout<<"Do you wish to sort your contact list? If so please enter one of the following(N to exit)\n"<<"    - Sort Alphebetically\n"<<"    - Sort by bank balance"<<std::endl;
-            std::cin>>userInput;
-            std::getline(std::cin, userInput);
-            userInput.erase(std::remove(userInput.begin(), userInput.end(), ' '), userInput.end());  
-            std::transform(userInput.begin(), userInput.end(),userInput.begin(),[](unsigned char c){return std::tolower(c);});
-       
+            
+
 
         }
 
