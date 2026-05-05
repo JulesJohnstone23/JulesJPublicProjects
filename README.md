@@ -64,4 +64,8 @@ The computer then picks a random number, and makes their move at thus random num
 
 Thus the game continues as conventional tic tac toe, until either the player or the computer wins.
 
+---
+
+## *Note, currently in process of making a MPPT solar panel phone charger*
+
 
