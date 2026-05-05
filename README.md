@@ -28,3 +28,40 @@ Button 2
 --- 
 
 ## *Advanced Tic Tac Toe Game*
+The purpose of this game was to make me more fluent in C++. 
+This is a more advanced take on the more regular tic tac toe game. It is advanced because of the different user inputs which changes the parameters of the end game. As follows.
+
+<p align="center">
+  <img src="images/TicTacToeOne.png" alt="Image 5" width="350" />
+</p>
+
+The user is initially greeted with the following message from the program.
+
+
+<p align="center">
+  <img src="images/TicTacToeTwo.png" alt="Image 5" width="350" />
+  <img src="images/TicTacToeFive.png" alt="Image 5" width="350" />
+</p>
+
+The first parameter that the user has choice on, is the size of the gameboard, as shown above. Thus by entering the number 4, a 4x4 grid is generated. The same rules for conventional 3x3 tic tac toe still apply.
+
+Furthermore, the user is also able to enter the character they wish to be displayed for empty spaces.
+
+As shown to the right, if the character entered is 'N' or 'n' then the positional numbers is printed to the screen.
+
+<p align="center">
+  <img src="images/TicTacToeThree.png" alt="Image 5" width="350" />
+</p>
+
+The user then has to enter the position for their move, eg in the above example, entering number five, the user makes a move at space 5.
+The computer then picks a random number, and makes their move at thus random number they chose.
+
+
+
+<p align="center">
+  <img src="images/TicTacToeFour.png" alt="Image 5" width="350" />
+</p>
+
+Thus the game continues as conventional tic tac toe, until either the player or the computer wins.
+
+
