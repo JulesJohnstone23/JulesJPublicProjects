@@ -1,6 +1,7 @@
 # **Overview of Main Projects I have completed**
 
-## *Dual-mode Weather station*
+<details></details>
+<summary>## *Dual-mode Weather station*</summary>
 
 The dual mode weather station that I developed takes both measurements for the current conditions in the room, as well as it uses a free and open source online API(Open-mateo API) to retrieve measurements for current location, and is able to retrieve information about what the current time and date is through again communicating with an online API being World Time API. 
 
@@ -25,9 +26,12 @@ Button 2
   <img src="images/clock.png" alt="Image 2" width="400" />
 </p>
 
---- 
+---
 
-## *Advanced Tic Tac Toe Game*
+</details>
+
+<details>
+<summary>## *Advanced Tic Tac Toe Game*</summary>
 The purpose of this game was to make me more fluent in C++. 
 This is a more advanced take on the more regular tic tac toe game. It is advanced because of the different user inputs which changes the parameters of the end game. As follows.
 
@@ -65,6 +69,7 @@ The computer then picks a random number, and makes their move at thus random num
 Thus the game continues as conventional tic tac toe, until either the player or the computer wins.
 
 ---
+</details>
 
 ## *Note, currently in process of making a MPPT solar panel phone charger*
 
