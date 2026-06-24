@@ -26,6 +26,10 @@ However, lots of devices need to have a constant stable output voltage, one that
 - 1 x Raspberry Pico
 - 1 x OLED Display
 
+<p align="center">
+  <img src="diagramFinal (2).png" alt="DiagramImage" width="600" />
+</p>
+
 Note in reality there are only 2 USB micro modules not 3, this is due to only having one micro usb to USB A convertor.
 
 </details>
