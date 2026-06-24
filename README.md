@@ -21,13 +21,12 @@ However, lots of devices need to have a constant stable output voltage, one that
 - 1 x INA219 - Current, voltage and power measuring sensor
 - 1 x CN3791 - MPPT Solar Panel Charge Controller
 - 1 x Solar Panel - 5W, 12V 
-- 1 x LiPo Battery - 103450 3.7V 2000mAh
-- 2 x Breakout Pins to USB Micro MOdule
+- 1 x LiPo Battery - 103450 3.7V 2000mAh with inbuilt short circuit and overcharge protection
+- 3 x Breakout Pins to USB Micro Module
 - 1 x Raspberry Pico
 - 1 x OLED Display
 
-
-
+Note in reality there are only 2 USB micro modules not 3, this is due to only having one micro usb to USB A convertor.
 
 </details>
 
