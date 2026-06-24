@@ -1,7 +1,38 @@
+## *Note, currently in process of investigating making variable power supply *
+
 # **Overview of Main Projects I have completed**
 
 <details>
-<summary><strong>*Dual-mode Weather station*</strong></summary>
+<summary><strong>MPPT Solar Panel USB Charger</strong></summary>
+
+## *MPPT Solar Panel USB Charger*
+
+### Introduction
+In this modern day and age, everyone wants an energy sector made primarily of renewable energy. Not only is renewable energy more environmentally friendly, it also makes sense from an economic standpoint, as indicated by the recent Iran War Fuel Crisis. This conflict, reminded New Zealand of the importance of having a nationalistic and independent approach to renewable energy. It reminded us of the negative negative effects of being reliant on foreign countries to produce our necessary energy needs, and how a conflict on the opposite side of the world can have a substantial impact on our economy.
+
+Which is the reason behind making an MPPT solar panel USB charger for myself. This device enables me to be able to access renewable energy on the fly wherever I am. This is useful for me since I enjoy doing talks in the Tararua Range, and so having a small compact device that allows me to get free, clean energy is extremerly useful, since it avoids the use of having to carry around a battery pack, which slowly uses charge the more I use it, until it is next charged.
+
+Furthermore, by being MPPT (maximum power point tracking), it means that I am maximizing the power output from the solar panel. This is important in renewable systems, since if we have a solar panel farm, we want to be able to maximise the power we are getting from these solar panels, hence we wish to maximise power to do so, hence the advantage of using MPPT.
+However, lots of devices need to have a constant stable output voltage, one that is not MPPT, such as phones which require a constant stable 5V output, hence this will also be a feature of my MPPT solar panel USB charger.
+
+### Components Used
+
+- 1 x MT3608 - Step Up DC-DC Boost Convertor
+- 1 x INA219 - Current, voltage and power measuring sensor
+- 1 x CN3791 - MPPT Solar Panel Charge Controller
+- 1 x Solar Panel - 5W, 12V 
+- 1 x LiPo Battery - 103450 3.7V 2000mAh
+- 2 x Breakout Pins to USB Micro MOdule
+- 1 x Raspberry Pico
+- 1 x OLED Display
+
+
+
+
+</details>
+
+<details>
+<summary><strong>Dual-mode Weather station</strong></summary>
 
 ## *Dual-mode Weather station*
 
@@ -34,7 +65,7 @@ Button 2
 </details>
 
 <details>
-<summary><strong>*Advanced TIc Tac Toe Game*</strong></summary>
+<summary><strong>Advanced TIc Tac Toe Game</strong></summary>
 
 
 ## *Dual-mode Weather station*
@@ -77,7 +108,4 @@ Thus the game continues as conventional tic tac toe, until either the player or 
 
 ---
 </details>
-
-## *Note, currently in process of making a MPPT solar panel phone charger*
-
 
