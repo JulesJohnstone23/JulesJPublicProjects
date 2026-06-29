@@ -32,6 +32,18 @@ However, lots of devices need to have a constant stable output voltage, one that
 
 Note in reality there are only 2 USB micro modules not 3, this is due to only having one micro usb to USB A convertor.
 
+### Stage One of Development
+
+Stage one of development includes setting up the MPPT Solar panel controller, and attaching it to the MT3608 step up voltage module and then having two usb output devices. 
+Please ignore the Pico and OLED display in the images below.
+
+<p align="center">
+  <img src="images/soldering.jpg" alt="DiagramImage" width="400" />
+  <img src="images/MPPTPhoto.jpg" alt="DiagramImage" width="400" />
+</p>
+
+
+
 </details>
 
 <details>
