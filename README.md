@@ -38,9 +38,17 @@ Stage one of development includes setting up the MPPT Solar panel controller, an
 Please ignore the Pico and OLED display in the images below.
 
 <p align="center">
-  <img src="images/soldering.jpg" alt="DiagramImage" width="400" />
-  <img src="images/MPPTPhoto.jpg" alt="DiagramImage" width="400" />
+  <img src="images/soldering.jpg" alt="DiagramImage" width="500" />
+  <img src="images/MPPTPhoto.jpg" alt="DiagramImage" width="500" />
 </p>
+
+
+One of the main issues we came across with stage one development of the MPPT charge controller, was to do with the MT3608. 
+The quality of the sky varies, sometimes only part of the solar panel will be covered by sunlight, sometimes there are clouds of varying density passing over the solar panel. As a result, the voltage output from the solar panel is constantly varying. It is the MT3608 job to output 5V, however, this device is not automatic, the potentiometer on the MT3608 has to be manually tuned to output 5V, even so this is not constant. Lets say if we tune potentiometer to output 5V and then a cloud then goes over solar panel, then the output will then be less than 5V.
+
+This is a big flaw in the design of this MPPT solar panel device, due to if the step up voltage does not automatically correct itself to constantly change to 5V, this device has no real application in the field, which is the main motivation of making this device, to make a device that i am able to use when I go on hikes in NZ.
+
+That being said, the components developed into the board for stage one was succesful, when setting MT3608 potentiometer to output 5V in clear skies, by then connecting phone to output of one of the USB output devices, we are able to charge a mobile phone using it. 
 
 
 
